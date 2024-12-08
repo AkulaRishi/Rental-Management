@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Rental Management</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            margin: 15px;
+            text-align: center;
+        }
+        nav a {
+            margin: 10px;
+            padding: 10px;
+            color: #0056b3;
+            text-decoration: none;
+            border: 1px solid #0056b3;
+            border-radius: 5px;
+        }
+        nav a:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .buttons button {
+            padding: 12px 30px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .buttons button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        .property-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .property-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .property-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .property-item h3 {
+            margin: 0;
+            color: #333;
+            font-size: 18px;
+        }
+        .property-item p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 14px;
+        }
+        .property-item p span {
+            font-weight: bold;
+        }
+        .no-properties {
+            text-align: center;
+            font-size: 16px;
+            color: #888;
+        }
+        @media (max-width: 768px) {
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .buttons button {
+                width: 100%;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="about.html">About Us</a>
+    </nav>
+
+<div class="container">
+    <h2>Add your property here</h2>
+    <div class="buttons">
+        <button class="propertyadd" onclick="location.href='property.html'">Add Your Property</button>
+    </div>
+    <h2>Property Listings</h2>
+
+    <div class="buttons">
+        <button id="buyButton">Buy</button>
+        <button id="rentButton">Rent</button>
+    </div>
+
+    <div class="property-list" id="propertyList">
+        <!-- Property items will be listed here -->
+    </div>
+</div>
+
+<script>
+    // Load properties from localStorage and display based on the selected type
+    document.getElementById('buyButton').addEventListener('click', function() {
+        displayProperties('buy');
+    });
+
+    document.getElementById('rentButton').addEventListener('click', function() {
+        displayProperties('rent');
+    });
+
+    function displayProperties(transactionType) {
+        // Retrieve properties from localStorage
+        const properties = JSON.parse(localStorage.getItem('properties')) || [];
+        const filteredProperties = properties.filter(property => property.transactionType === transactionType);
+        
+        const propertyListContainer = document.getElementById('propertyList');
+        propertyListContainer.innerHTML = ''; // Clear previous results
+
+        if (filteredProperties.length > 0) {
+            filteredProperties.forEach(property => {
+                const propertyItem = document.createElement('div');
+                propertyItem.classList.add('property-item');
+                propertyItem.innerHTML = `
+                    <h3>${property.type} - ${property.address}</h3>
+                    <p><span>Property ID:</span> ${property.propertyID}</p>
+                    <p><span>Bedrooms:</span> ${property.bedrooms}</p>
+                    <p><span>Price:</span> ${property.rent}</p>
+                `;
+                propertyListContainer.appendChild(propertyItem);
+            });
+        } else {
+            propertyListContainer.innerHTML = '<p class="no-properties">No properties available for this type.</p>';
+        }
+    }
+</script>
+
+</body>
+</html>
